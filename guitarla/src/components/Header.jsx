@@ -1,9 +1,13 @@
-function Header({ cart }) {
+import { useMemo } from "react";
+
+function Header({ cart, removeFromCart,increaseQuantity,decreaseQuantity,clearCart }) {
   //state derivado
-  const isEmpty = () => cart.length === 0;
+  // const isEmpty = () => cart.length === 0;
+
+  const isEmpty = useMemo(() => cart.length === 0, [cart]);
 
   //total
-  const carTotal = () => cart.reduce((total,item) => total + (item.quantity * item.price),0)
+  const cartTotal = useMemo( () => cart.reduce((total,item) => total + (item.quantity * item.price),0), [cart])
 
   return (
     <header className="py-5 header">
@@ -13,7 +17,7 @@ function Header({ cart }) {
             <a href="index.html">
               <img
                 className="img-fluid"
-                src="./public/img/logo.svg"
+                src="./img/logo.svg"
                 alt="imagen logo"
               />
             </a>
@@ -22,12 +26,12 @@ function Header({ cart }) {
             <div className="carrito">
               <img
                 className="img-fluid"
-                src="./public/img/carrito.png"
+                src="./img/carrito.png"
                 alt="imagen carrito"
               />
 
               <div id="carrito" className="bg-white p-3">
-                {isEmpty() ? (
+                {isEmpty ? (
                   <p className="text-center">El carrito esta vacio</p>
                 ) : (
                   <>
@@ -55,16 +59,16 @@ function Header({ cart }) {
                             <td>{guitar.name}</td>
                             <td className="fw-bold">${guitar.price}</td>
                             <td className="flex align-items-start gap-4">
-                              <button type="button" className="btn btn-dark">
+                              <button type="button" className="btn btn-dark" onClick={()=> decreaseQuantity(guitar.id)}>
                                 -
                               </button>
                               {guitar.quantity}
-                              <button type="button" className="btn btn-dark">
+                              <button type="button" className="btn btn-dark" onClick={()=> increaseQuantity(guitar.id)}>
                                 +
                               </button>
                             </td>
                             <td>
-                              <button className="btn btn-danger" type="button">
+                              <button className="btn btn-danger" type="button" onClick={() => removeFromCart(guitar.id)}>
                                 X
                               </button>
                             </td>
@@ -74,12 +78,12 @@ function Header({ cart }) {
                     </table>
 
                     <p className="text-end">
-                      Total pagar: <span className="fw-bold">${carTotal()}</span>
+                      Total pagar: <span className="fw-bold">${cartTotal}</span>
                     </p>
                   </>
                 )}
 
-                <button className="btn btn-dark w-100 mt-3 p-2">
+                <button className="btn btn-dark w-100 mt-3 p-2" onClick={clearCart}>
                   Vaciar Carrito
                 </button>
               </div>
