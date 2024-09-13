@@ -3,6 +3,7 @@ import type { MenuItem, OrderItem } from "../types/index";
 
 export default function useOrder() {
   const [order, setOrder] = useState<OrderItem[]>([]);
+  const [tip, setTip] = useState(0);
 
   //agregar elementos
   const addItem = (item: MenuItem) => {
@@ -27,5 +28,11 @@ export default function useOrder() {
     setOrder(order.filter((item) => item.id !== id));
   };
 
-  return { order, addItem, removerItem };
+  //boton guardar
+  const placeOrder = () => {
+    setOrder([]);
+    setTip(0);
+  };
+
+  return { order, tip, setTip, addItem, removerItem, placeOrder };
 }
