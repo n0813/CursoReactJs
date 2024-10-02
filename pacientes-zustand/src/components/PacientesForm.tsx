@@ -1,17 +1,49 @@
 import { useForm } from "react-hook-form";
 import Errors from "./Errors";
 import { DraftPaciente } from "../types";
+import { usePacientesStore } from "../store/store";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function PacientesForm() {
+  const activeId = usePacientesStore((store) => store.activeID);
+  const pacientes = usePacientesStore((store) => store.pacientes);
+  const actualizar = usePacientesStore((store) => store.updatePaciente);
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
+    reset,
   } = useForm<DraftPaciente>();
+  const { addPaciente } = usePacientesStore();
 
   const registerPacientes = (data: DraftPaciente) => {
-    console.log(data);
+    if (activeId) {
+      actualizar(data);
+      toast.success("Paciente actualizado correctamente");
+    } else {
+      addPaciente(data);
+      toast.success("Paciente registrado correctamente");
+    }
+
+    //reiniciamos el formulario lo limpia
+    reset();
   };
+
+  useEffect(() => {
+    if (activeId) {
+      const activePaciente = pacientes.filter((x) => x.id === activeId)[0];
+
+      setValue("name", activePaciente.name);
+      setValue("caretaker", activePaciente.caretaker);
+      setValue("email", activePaciente.email);
+      setValue("date", activePaciente.date);
+      setValue("symptoms", activePaciente.symptoms);
+    }
+    return () => {};
+  }, [activeId]);
 
   return (
     <div className="md:w-1/2 lg:w-2/5 mx-5">

@@ -1,5 +1,7 @@
+import { ToastContainer } from "react-toastify";
 import PacientesForm from "./components/PacientesForm";
 import PacientesList from "./components/PacientesList";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -15,6 +17,19 @@ function App() {
           <PacientesList />
         </div>
       </div>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 }
